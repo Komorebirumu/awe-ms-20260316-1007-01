@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Niche Genealogy Linker</title>
+    <!-- IMPORTANT AD INTEGRATION -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6359393063754801"
+     crossorigin="anonymous"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f7f6;
+            color: #333;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        h1, h2 {
+            text-align: center;
+            color: #0056b3;
+            margin-bottom: 20px;
+        }
+        .upload-section, .paste-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            background-color: #e9ecef;
+            border-radius: 8px;
+            text-align: center;
+        }
+        .upload-section input[type="file"],
+        .paste-section textarea {
+            width: calc(100% - 20px);
+            padding: 12px;
+            margin-top: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+        .upload-section label,
+        .paste-section label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+            color: #0056b3;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        #results-section {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+            font-size: 0.95rem;
+        }
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #007bff;
+            color: white;
+        }
+        tbody tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        .svg-container {
+            width: 100%;
+            max-width: 800px;
+            margin: 20px auto;
+            text-align: center;
+            background-color: #e9ecef;
+            padding: 20px;
+            border-radius: 8px;
+        }
+        svg {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+        }
+        .awe-ad-slot {
+            text-align:center;
+            padding:15px;
+            margin: 20px 0;
+            background:#f0f0f0;
+            color:#888;
+            border-radius: 4px;
+            font-size: 0.9rem;
+        }
+        .download-button-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            font-size: 0.8rem;
+            color: #777;
+            background-color: #e9ecef;
+            border-radius: 8px;
+        }
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+                padding: 15px;
+            }
+            h1 {
+                font-size: 1.8rem;
+            }
+            button {
+                font-size: 1rem;
+                padding: 10px 20px;
+            }
+            th, td {
+                padding: 8px 10px;
+                font-size: 0.85rem;
+            }
+            .upload-section input[type="file"],
+            .paste-section textarea {
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>AI-Driven Niche Genealogy Record Linker</h1>
+        <p style="text-align: center; color: #666; margin-bottom: 30px;">Automate linking and find discrepancies in your niche genealogical records.</p>
+
+        <div class="upload-section">
+            <label for="fileInput">Upload CSV File:</label>
+            <input type="file" id="fileInput" accept=".csv">
+        </div>
+
+        <div class="paste-section">
+            <label for="pasteInput">Paste CSV Data:</label>
+            <textarea id="pasteInput" rows="10" placeholder="Paste your CSV data here (ensure it's comma-separated)"></textarea>
+        </div>
+
+        <div style="text-align: center; margin-top: 20px;">
+            <button onclick="processData()">Analyze Records</button>
+        </div>
+
+        <div id="results-section" style="display: none;">
+            <h2>Analysis Results</h2>
+
+            <div class="awe-ad-slot">
+                <!-- AD_SLOT -->
+                [ Advertisement Placeholder ]
+            </div>
+
+            <div id="chartContainer" class="svg-container">
+                <!-- SVG Chart will be rendered here -->
+            </div>
+
+            <h3>Summary Statistics</h3>
+            <div id="statsTableContainer">
+                <!-- Statistics table will be rendered here -->
+            </div>
+
+            <div class="download-button-container">
+                <button onclick="downloadCSV()">Download Results (CSV)</button>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <!-- EU AI Act Disclosure -->
+        This tool utilizes JavaScript for client-side data processing. No personal data is uploaded to any server. Analysis and transformations are performed entirely within your browser. This AI-powered tool is for informational and analytical purposes and does not make autonomous decisions.
+    </footer>
+
+    <script>
+        function parseCSV(text) {
+            const lines = text.split('\n');
+            const headers = lines[0].split(',');
+            const data = [];
+            for (let i = 1; i < lines.length; i++) {
+                if (lines[i].trim() === '') continue;
+                const values = lines[i].split(',');
+                const row = {};
+                for (let j = 0; j < headers.length; j++) {
+                    row[headers[j].trim()] = values[j] ? values[j].trim() : '';
+                }
+                data.push(row);
+            }
+            return { headers, data };
+        }
+
+        function calculateStats(data) {
+            const stats = {};
+            const numericHeaders = Object.keys(data[0]).filter(key => !isNaN(parseFloat(data[0][key])));
+
+            for (const header of numericHeaders) {
+                const values = data.map(row => parseFloat(row[header])).filter(val => !isNaN(val));
+                if (values.length === 0) continue;
+
+                const count = values.length;
+                const min = Math.min(...values);
+                const max = Math.max(...values);
+                const mean = values.reduce((sum, val) => sum + val, 0) / count;
+
+                const sortedValues = [...values].sort((a, b) => a - b);
+                const mid = Math.floor(sortedValues.length / 2);
+                const median = sortedValues.length % 2 === 0 ? (sortedValues[mid - 1] + sortedValues[mid]) / 2 : sortedValues[mid];
+
+                stats[header] = { count, min, max, mean, median };
+            }
+            return stats;
+        }
+
+        function renderStatsTable(stats) {
+            let tableHTML = '<table><thead><tr><th>Metric</th>';
+            for (const header in stats) {
+                tableHTML += `<th>${header}</th>`;
+            }
+            tableHTML += '</tr></thead><tbody>';
+
+            const metrics = ['Count', 'Min', 'Max', 'Mean', 'Median'];
+            for (const metric of metrics) {
+                tableHTML += `<tr><td>${metric}</td>`;
+                for (const header in stats) {
+                    if (stats[header]) {
+                        const value = stats[header][metric.toLowerCase()];
+                        tableHTML += `<td>${typeof value === 'number' ? value.toFixed(2) : value}</td>`;
+                    } else {
+                        tableHTML += '<td>N/A</td>';
+                    }
+                }
+                tableHTML += '</tr>';
+            }
+            tableHTML += '</tbody></table>';
+            document.getElementById('statsTableContainer').innerHTML = tableHTML;
+        }
+
+        function renderChart(stats) {
+            const chartContainer = document.getElementById('chartContainer');
+            chartContainer.innerHTML = ''; // Clear previous chart
+
+            if (Object.keys(stats).length === 0) {
+                chartContainer.innerHTML = '<p>No numeric data found to generate a chart.</p>';
+                return;
+            }
+
+            const svgNS = "http://www.w3.org/2000/svg";
+            const svg = document.createElementNS(svgNS, "svg");
+            const width = 700;
+            const height = 300;
+            svg.setAttribute("viewBox", `0 0 ${width} ${height}`);
+            svg.setAttribute("preserveAspectRatio", "xMidYMid meet");
+
+            const margin = { top: 20, right: 30, bottom: 50, left: 40 };
+            const innerWidth = width - margin.left - margin.right;
+            const innerHeight = height - margin.top - margin.bottom;
+
+            const chartGroup = document.createElementNS(svgNS, "g");
+            chartGroup.setAttribute("transform", `translate(${margin.left},${margin.top})`);
+            svg.appendChild(chartGroup);
+
+            const metricKeys = Object.keys(stats);
+            const numMetrics = metricKeys.length;
+
+            const xDomain = metricKeys;
+            const xRange = [0, innerWidth];
+            const xScale = d3.scaleBand().domain(xDomain).range(xRange).padding(0.2);
+
+            const yValues = Object.values(stats).flatMap(s => [s.min, s.max, s.mean, s.median]).filter(v => typeof v === 'number');
+            if (yValues.length === 0) {
+                chartContainer.innerHTML = '<p>No valid numeric data for charting.</p>';
+                return;
+            }
+            const yMin = Math.min(...yValues) * 0.9;
+            const yMax = Math.max(...yValues) * 1.1;
+            const yRange = [innerHeight, 0];
+            const yScale = d3.scaleLinear().domain([yMin < 0 ? yMin : 0, yMax]).range(yRange);
+
+            // X-axis
+            const xAxis = d3.axisBottom(xScale);
+            const xAxisGroup = chartGroup.append("g")
+                .attr("transform", `translate(0,${innerHeight})`)
+                .call(xAxis);
+            xAxisGroup.selectAll("text")
+                .style("text-anchor", "end")
+                .attr("dx", "-.8em")
+                .attr("dy", ".15em")
+                .attr("transform", "rotate(-45)");
+
+            // Y-axis
+            const yAxis = d3.axisLeft(yScale);
+            chartGroup.append("g").call(yAxis);
+
+            // Bars
+            const barWidth = xScale.bandwidth();
+            const colors = ['#007bff', '#28a745', '#ffc107', '#dc3545', '#17a2b8'];
+
+            metricKeys.forEach((key, i) => {
+                const data = stats[key];
+                const barHeightMean = yScale(data.mean);
+                const barHeightMedian = yScale(data.median);
+
+                // Mean Bar
+                const meanRect = document.createElementNS(svgNS, "rect");
+                meanRect.setAttribute("x", xScale(key) + barWidth / 4);
+                meanRect.setAttribute("y", barHeightMean);
+                meanRect.setAttribute("width", barWidth / 2);
+                meanRect.setAttribute("height", innerHeight - barHeightMean);
+                meanRect.setAttribute("fill", colors[i % colors.length]);
+                chartGroup.appendChild(meanRect);
+
+                // Median Line (simplified for this example, could be a thicker line)
+                const medianLine = document.createElementNS(svgNS, "line");
+                medianLine.setAttribute("x1", xScale(key) - barWidth / 4);
+                medianLine.setAttribute("x2", xScale(key) + barWidth * 3 / 4);
+                medianLine.setAttribute("y1", barHeightMedian);
+                medianLine.setAttribute("y2", barHeightMedian);
+                medianLine.setAttribute("stroke", "#6c757d");
+                medianLine.setAttribute("stroke-width", "3");
+                chartGroup.appendChild(medianLine);
+            });
+
+            // Add labels and title (simplified)
+            chartGroup.append("text")
+                .attr("text-anchor", "middle")
+                .attr("x", innerWidth / 2)
+                .attr("y", innerHeight + margin.bottom - 10)
+                .text("Statistical Metric");
+
+            chartGroup.append("text")
+                .attr("text-anchor", "middle")
+                .attr("transform", "rotate(-90)")
+                .attr("x", -innerHeight / 2)
+                .attr("y", -margin.left + 15)
+                .text("Value");
+
+            chartContainer.appendChild(svg);
+        }
+
+
+        // Dummy d3 functions for SVG rendering without external dependency
+        // In a real-world scenario, you would include d3.js or a similar library for robust charting.
+        // For this example, we'll simulate basic SVG element creation.
+        const d3 = {
+            scaleBand: () => ({ domain: function(d) { return this; }, range: function(r) { return this; }, padding: function(p) { return this; }, bandwidth: () => 20 }),
+            scaleLinear: () => ({ domain: function(d) { return this; }, range: function(r) { return this; } }),
+            axisBottom: (scale) => ({ call: () => {} }),
+            axisLeft: (scale) => ({ call: () => {} }),
+            append: (elementName) => {
+                const el = document.createElementNS("http://www.w3.org/2000/svg", elementName);
+                el.setAttribute = (name, value) => el.setAttributeNS(null, name, value);
+                return el;
+            }
+        };
+
+
+        function processData() {
+            const fileInput = document.getElementById('fileInput');
+            const pasteInput = document.getElementById('pasteInput');
+            let csvData = '';
+
+            if (fileInput.files.length > 0) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    csvData = e.target.result;
+                    processAndDisplay(csvData);
+                };
+                reader.readAsText(fileInput.files[0]);
+            } else if (pasteInput.value) {
+                csvData = pasteInput.value;
+                processAndDisplay(csvData);
+            } else {
+                alert('Please upload a CSV file or paste CSV data.');
+            }
+        }
+
+        function processAndDisplay(csvData) {
+            const { headers, data } = parseCSV(csvData);
+            const stats = calculateStats(data);
+
+            renderStatsTable(stats);
+            renderChart(stats); // Pass stats to renderChart
+
+            document.getElementById('results-section').style.display = 'block';
+        }
+
+        function downloadCSV() {
+            const fileInput = document.getElementById('fileInput');
+            const pasteInput = document.getElementById('pasteInput');
+            let csvString = '';
+
+            if (fileInput.files.length > 0) {
+                csvString = fileInput.files[0].name.replace('.csv', '_processed.csv');
+            } else if (pasteInput.value) {
+                csvString = 'processed_genealogy_data.csv';
+            } else {
+                alert('No data to download.');
+                return;
+            }
+
+            const processedData = [];
+            const headers = Object.keys(stats); // Assuming stats object is accessible globally or passed
+
+            // Re-parse to get original data structure for download
+            let sourceData;
+            if (fileInput.files.length > 0) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    sourceData = parseCSV(e.target.result).data;
+                    generateDownload(sourceData, csvString);
+                };
+                reader.readAsText(fileInput.files[0]);
+            } else {
+                sourceData = parseCSV(pasteInput.value).data;
+                generateDownload(sourceData, csvString);
+            }
+        }
+
+        function generateDownload(sourceData, filename) {
+            let csvContent = '';
+            const headers = Object.keys(sourceData[0]);
+            csvContent += headers.join(',') + '\n';
+
+            sourceData.forEach(row => {
+                csvContent += headers.map(header => `"${row[header].replace(/"/g, '""')}"`).join(',') + '\n';
+            });
+
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement("a");
+            if (link.download !== undefined) {
+                const url = URL.createObjectURL(blob);
+                link.setAttribute("href", url);
+                link.setAttribute("download", filename);
+                link.style.visibility = 'hidden';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            }
+        }
+
+        // Global variable to hold stats for download function accessibility
+        let stats = {};
+
+        // Override processAndDisplay to make stats globally accessible for download
+        const originalProcessAndDisplay = processAndDisplay;
+        processAndDisplay = function(csvData) {
+            const parsed = parseCSV(csvData);
+            stats = calculateStats(parsed.data); // Assign to global stats
+            renderStatsTable(stats);
+            renderChart(stats);
+            document.getElementById('results-section').style.display = 'block';
+        };
+
+    </script>
+</body>
+</html>
